@@ -1,0 +1,307 @@
+\documentclass[]{report}
+
+% Title Page
+\title{}
+\author{}
+
+\usepackage{tikz}
+\usepackage{circuitikz}
+
+%path to pgfcircspecial.tex
+\input{../pgfcircspecial.tex}
+
+\begin{document}	
+	
+\begin{figure}
+	\begin{center}
+		\begin{circuitikz}[scale=0.75, transform shape, european]
+			\draw
+			
+			%electrochemical cell
+			(0,0) node [ecc2e] (ecc1) {}
+			;
+		\end{circuitikz}
+		\caption[ECC - 2E]{Electrochemical Cell with 2 Electrodes.}
+	\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+	\begin{circuitikz}[scale=0.75, transform shape, european]
+		\draw
+		
+		%electrochemical cell
+		(0,0) node [ecc3e] (ecc1) {}
+		;
+	\end{circuitikz}
+	\caption[ECC - 3E]{Electrochemical Cell with 3 Electrodes.}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+	\begin{circuitikz}[scale=0.75, transform shape, european]
+		\draw
+		
+		%electrochemical cell
+		(0,0) node [ecc4e] (ecc1) {}
+		;
+	\end{circuitikz}
+	\caption[ECC - 4E]{Electrochemical Cell with 4 Electrodes.}
+\end{center}
+\end{figure}
+
+
+
+\begin{figure}
+	\begin{center}
+		\begin{circuitikz}[scale=0.75, transform shape, european]
+			\draw
+			
+			%electrochemical cell
+			(-5,0) node [ecc2e] (ecc1) {}
+			(ecc1.ce)
+			node [below left] {CE}
+			(ecc1.we)
+			node [below right] {WE}
+			
+			
+			(0,0) node [ecc3e] (ecc2) {}
+			(ecc2.ce)
+			node [below left] {AUX}
+			(ecc2.we)
+			node [below right] {WE}
+			(ecc2.re)
+			node [above] {RE}			
+			
+			(5,0) node [ecc4e] (ecc3) {}
+			(ecc3.ce)
+			node [below left] {AUX}
+			(ecc3.we)
+			node [below right] {WE}
+			(ecc3.re1)
+			node [above] {RE1}
+			(ecc3.re2)
+			node [below] {RE2}
+			;
+		\end{circuitikz}
+		\caption[ECC - Anchors]{Symbol Anchors. }
+	\end{center}
+\end{figure}
+	
+
+\begin{figure}
+	\begin{center}
+		\begin{circuitikz}[scale=0.75, transform shape, european]
+			\draw
+			
+			%electrochemical cell - origin
+			(0,0) node [ecc2e] (ecc1) {}
+			
+			%cell potential arrow
+			($(ecc1.we)+(0,0.5)$)
+			to [open, v>=$V_{cell}$] ($(ecc1.ce)+(0,0.5)$)  
+			
+			(ecc1.ce)
+			node [below left] {RE}
+			to [short] ($(ecc1.ce)+(-1,0)$)
+			to [short] ($(ecc1.ce)+(-1,-4.5)$)
+			node [rground] (ground_left) {}
+			
+			%left hand side
+			($(ecc1)+(3,-0.5)$) node [op amp, yscale=-1] (opamp) {}
+			(opamp) node {OA1}
+			
+			(opamp.out)
+			to [short, *-o] ($(opamp.out)+(1,0)$)
+			node [right] {$V_{out}$}
+			
+			(opamp.out)
+			to [R, l=$R_1$] ($(opamp.out)+(0,-2)$)
+			to [R, l=$R_2$] ($(opamp.out)+(0,-4)$)
+			node [rground] {}		
+			
+			(opamp.-)
+			to [short] ($(opamp.-)+(0,-1.5)$)
+			to [short, -*] ($(opamp.out)+(0,-2)$)
+			
+			(opamp.+)
+			to [short] (ecc1.we)
+			node [below right] {WE}
+			
+			;
+		\end{circuitikz}
+		\caption[Electrometer amplifier for potentiometric measurements]{Electrometer amplifier circuit for potentiometric measurements using a non-inverting operational amplifier. }
+	\end{center}
+\end{figure}
+
+\begin{figure}
+	\begin{center}
+		\begin{circuitikz}[scale=0.75, transform shape, european]
+			\draw
+			
+			%electrochemical cell - origin
+			(0,0) node [ecc2e, rotate=90] (ecc1) {}
+			
+			%cell potential arrow
+			($(ecc1.we)+(-0.5,0)$)
+			to [open, v>=$V_{cell}$] ($(ecc1.ce)+(-0.5,0)$)  
+			
+			(ecc1.ce)
+			node [below left] {RE}
+			
+			(ecc1.we)
+			node [above left] {WE}
+			
+			%input stage, upper operation amplifier
+			($(ecc1)+(3,3)$) node [op amp, yscale=-1] (opamp1) {}
+			(opamp1) node {OA1}
+			
+			%input stage, lower operation amplifier
+			($(ecc1)+(3,-3)$) node [op amp] (opamp2) {}
+			(opamp2) node {OA2}
+			
+			(ecc1.we)
+			|- (opamp1.+)
+			
+			(ecc1.ce)
+			|- (opamp2.+)
+			to [short, *-] ($(opamp2.+)+(0,-0.5)$)
+			node [rground] {}
+			
+			%R3
+			(opamp1.-)
+			to [short] ($(opamp1.-)+(0,-1.5)$)
+			to [R, l=$R_3$] ($(opamp2.-)+(0,1.5)$)
+			to [short] (opamp2.-)
+			
+			%R1
+			(opamp1.out)
+			to [short] ($(opamp1.out)+(0,-2)$)
+			to [R, l=$R_1$, *-*] ($(opamp1.-)+(0,-1.5)$)		
+			
+			%R2
+			(opamp2.out)
+			to [short] ($(opamp2.out)+(0,2)$)
+			to [R, l=$R_2$, *-*] ($(opamp2.-)+(0,1.5)$)
+			
+			%diff amplifier stage
+			($(ecc1)+(8,0)$)
+			node [op amp] (opamp3) {}
+			(opamp3) node {OA3}
+			
+			($(opamp1.out)+(0,-2)$)
+			to [short] ($(opamp1.out)+(0,-2.5)$)
+			to [R, l=$R_4$] (opamp3.-)
+			
+			($(opamp2.out)+(0,2)$)
+			to [short] ($(opamp2.out)+(0,2.5)$)
+			to [R, l=$R_6$] (opamp3.+)
+			
+			(opamp3.+)
+			to [R, l=$R_7$, *-] ($(opamp3.+)+(0,-2)$)
+			node [rground] {}
+			
+			(opamp3.out)
+			to [short, *-] ($(opamp3.out)+(0,2)$)
+			to [R, l=$R_5$] ($(opamp3.-)+(0,1.5)$)
+			to [short, -*] (opamp3.-)
+			
+			(opamp3.out)
+			to [short, -o] ($(opamp3.out)+(1,0)$)
+			node [right] {$V_{out}$}
+			
+			;
+		\end{circuitikz}
+		\caption[Instrumentation amplifier for potentiometric measurements]{Electrometer amplifier circuit for potentiometric measurements, implemented using an instumentation amplifier.}
+	\end{center}
+\end{figure}
+
+\begin{figure}
+	\begin{center}
+		\begin{circuitikz}[scale=0.75, transform shape, european]
+			\draw
+			
+			%electrochemical cell - origin
+			(0,0) node [ecc3e] (ecc1) {}
+			
+			%potentiostat stage
+			($(ecc1)+(-3,0)$) node [op amp] (opamp_ps1) {}
+			(opamp_ps1) node {OA1}			
+			
+			($(opamp_ps1.+)+(-1,0)$) node [left] {$V_{set}$}
+			to [short, o-] (opamp_ps1.+)
+			
+			(opamp_ps1.-)
+			|- ($(opamp_ps1.-)+(0,1)$)
+			-| (ecc1.re)
+			node [above right] {RE}
+			
+			(opamp_ps1.out)
+			to [short] (ecc1.aux) 
+			node [below left] {AUX}
+			
+			%current follower stage
+			($(ecc1)+(3,-0.5)$) node [op amp] (opamp_cf1) {}
+			(opamp_cf1) node {OA2}
+			
+			(opamp_cf1.-)
+			to [short, i_<=$I_{cell}$] (ecc1.we) 
+			node [below right] {WE}
+			
+			(opamp_cf1.+) 
+			to [short] ($(opamp_cf1.+)+(0,-1)$) 
+			node [rground] {}
+			
+			(opamp_cf1.-)  
+			to [short, *-] ($(opamp_cf1.-)+(0,1)$) 
+			to [vR, l=$R_1$	] ($(opamp_cf1.out)+(0,1.5)$)
+			to [short, -*] (opamp_cf1.out)		
+			
+			(opamp_cf1.out)
+			to [short, -o] ($(opamp_cf1.out)+(1,0)$)
+			node [right] {$V_{out}$}
+			
+			;
+		\end{circuitikz}
+		\caption[Potentiostat and transimpedance amplifier]{Potentiostat and transimpedance amplifier circuit for voltammetric measurements. }
+	\end{center}
+\end{figure}
+
+\begin{figure}
+	\begin{center}
+		\begin{circuitikz}[scale=0.75, transform shape, european]
+			\draw
+			%solution resistace
+			(0,0) node {}
+			%			to [short, o-] (1,0)
+			to [R, l=$R_s$, o-*] (2,0)
+			
+			%parallel capacitor
+			(2,0)
+			to [short] (2,1)
+			to [C, l=$C_{d}$] (6,1)
+			to [short] (6,0)
+			
+			%
+			(2,0)
+			to [short] (2,-1)
+			to [R, l=$R_{p}$] (4,-1)
+			to [short] (4.5, -1)
+			%			node {W}
+			to [WI, l=$W$] (5.5, -1)
+			
+			
+			(5.5, -1)
+			to [short] (6,-1)
+			to [short, -*] (6,0)
+			to [short, -o] (7,0)
+			node {}
+			
+			;
+		\end{circuitikz}
+		\caption[Randles-Ershler equivalent electrical circuit]{Randles-Ershler equivalent electrical circuit model for electrochemical interfaces. \textit{W} is the \textit{Warburg Diffusion Element}.}
+	\end{center}
+\end{figure}
+	
+\end{document}      
